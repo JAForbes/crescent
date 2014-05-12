@@ -1,0 +1,63 @@
+{
+  "sequential": 25,
+  "_userPivot": {
+    "admin": 1,
+    "james": 2,
+    "john": 4
+  },
+  "tables": {
+    "_users": [
+      1,
+      2,
+      4
+    ],
+    "pockets": [
+      5
+    ],
+    "messages": [
+      3,
+      11,
+      12
+    ]
+  },
+  "data": {
+    "1": {
+      "name": "admin",
+      "password": "password",
+      "tableCreation": "true",
+      "role": "admin"
+    },
+    "2": {
+      "name": "james",
+      "password": "password",
+      "role": "user",
+      "access": []
+    },
+    "3": {
+      "body": "Hi",
+      "user": 2,
+      "pocket": 5,
+      "access": [
+        2,
+        4
+      ]
+    },
+    "4": {
+      "name": "john",
+      "password": "secure",
+      "role": "user",
+      "access": [
+        4
+      ]
+    },
+    "5": {
+      "name": "Asgard",
+      "description": "Pocket of the gods.",
+      "private": true,
+      "access": [
+        2,
+        4
+      ]
+    }
+  }
+}
