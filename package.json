@@ -1,0 +1,22 @@
+{
+  "name": "crescent",
+  "version": "0.0.0",
+  "description": "A convenient API for a simple JSON store.  Includes basic security roles.  Useful for setting up persistence for simple apps.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "database",
+    "json",
+    "crescent",
+    "db",
+    "james",
+    "forbes"
+  ],
+  "author": "James Forbes",
+  "license": "MIT",
+  "dependencies": {
+    "underscore": "^1.6.0"
+  }
+}
