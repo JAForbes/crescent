@@ -8,6 +8,41 @@ Installation
 
 `npm install JAForbes/crescent`
 
+Quick Start
+-----------
+
+```javascript
+var db = require('crescent')
+
+db('admin','password') //login
+
+//navigate into the users table
+('_users') 
+
+//create a new user
+({ 
+      "name": "james",
+      "password": "secret",
+      "role": "user"
+})
+
+//navigate back to the tables list
+('..')
+
+//create a table called messages and navigate back up to root
+('messages')('..')
+
+//delete messages table
+('messages')(null) 
+
+//set all users named james to admin
+('_users')(function(row,id){
+	if(row.name == 'james') row.role = 'admin';
+})()
+
+```
+
+
 Usage
 -----
 
