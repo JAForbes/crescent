@@ -11,39 +11,39 @@ Installation
 Usage
 -----
 
-_Logging in:_
+__Logging in:__
 
 `var db = require('crescent')('admin','password')`
 
-_List tables_
+__List tables__
 
 `db()`
 
-_List records of table_
+__List records of table__
 
 `db(tablename)()`
 
-_Create record_
+__Create record__
 
 `db(tablename)({ foo: 'bar' })()`
 
-_Modify record_
+__Modify record__
 
 `db(tablename)(record_id)({ foo: 'baz' })()`
 
-_Delete record_
+__Delete record__
 
 `db(tablename)(record_id)(null)()`
 
-_Delete table_
+__Delete table__
 
 `db(tablename)(null)`
 
-_Create table_
+__Create table__
 
 `db(tablename)({first: 'record', of: 'new table'})()`
 
-_Navigation_
+__Navigation__
 
 Return to current table from record with `.`:
 
@@ -53,7 +53,7 @@ Return to table list with `..`:
 
 `db(tablename)('..')()`
 
-_Roles and Access_
+__Roles and Access__
 
 There are two roles, `'admin'` and `'user'`.
 
@@ -65,13 +65,13 @@ Records have an array `access`.
 
 The `access` array contains the ids of users that are allowed to modify that record.
 
-_Restricted tables_
+__Restricted tables__
 
 Tables that begin with an underscore are restricted.  Only an admin can delete an underscored table.
 
 However non admin users can modify records if that record contains an `access` array contain that users id.
 
-_Advanced Querying using functions_
+__Advanced Querying using functions__
 
 The following returns a hash of records that match the critera.
 
