@@ -92,7 +92,6 @@ module.exports = (function(){
 
 	function save(callback,args){
 		fs.writeFile('./db/data.json',JSON.stringify(database,null,2), "utf8", function(){
-			console.log('file saved')
 		});
 		return callback.apply(null,args);
 	}
@@ -233,8 +232,23 @@ module.exports = (function(){
 		}
 	}
 
+	function pivotSearch(tablename,attributeName,value){
+		var _id;
+		_(database.data)
+			.chain()
+			.pick(database.tables[tablename])
+			.every(function(row,id){
+				if(row[attributeName] == value){
+					_id = id;
+				}
+				return row[attributeName] != value;
+			})
+			.value()
+		return _id;
+	}
+
 	function login(username,password){
-		var user_id = database._userPivot[username];
+		var user_id = pivotSearch('_users','name',username);
 		var error;
 		if(user_id){
 			var user = database.data[user_id];
@@ -251,7 +265,6 @@ module.exports = (function(){
 		}
 		return response;
 	}
-
 	return function(){
 		return login.apply(this,arguments)
 	}

@@ -1,10 +1,5 @@
 {
-  "sequential": 25,
-  "_userPivot": {
-    "admin": 1,
-    "james": 2,
-    "john": 4
-  },
+  "sequential": 27,
   "tables": {
     "_users": [
       1,
@@ -28,7 +23,7 @@
       "role": "admin"
     },
     "2": {
-      "name": "james",
+      "name": "basic",
       "password": "password",
       "role": "user",
       "access": []
@@ -39,14 +34,6 @@
       "pocket": 5,
       "access": [
         2,
-        4
-      ]
-    },
-    "4": {
-      "name": "john",
-      "password": "secure",
-      "role": "user",
-      "access": [
         4
       ]
     },
