@@ -61,9 +61,11 @@ Admins can modify restricted tables and create tables.
 
 Users can create records in existing tables.  Users can also modify records they have access too.
 
-Records have an array `access`.
+Records have an array called `access`.
 
 The `access` array contains the ids of users that are allowed to modify that record.
+
+Admins automatically have access.
 
 __Restricted tables__
 
