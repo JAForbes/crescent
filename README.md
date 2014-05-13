@@ -1,10 +1,6 @@
 crescent
 ========
 
-Note: I am currently porting the original code to coffeescript and writing 
-unit tests against this new code.  The port is in the repo under `port.coffee` for the adventurous.
-
-
 A convenient API for a simple JSON store.  Includes basic security roles.  Useful for setting up persistence for simple, non-concurrent apps.
 
 Installation
