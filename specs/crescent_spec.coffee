@@ -182,14 +182,31 @@ specs =
 			
 
 		'can modify records within a table using an anonymous function' : ->
-			no
+			testTable = 'test table'
+			#create table
+			admin(testTable)()
 
-		'can delete a restricted record if specific access is provided': ->
-			no
+			#create 5 records
+			_(5).times (i) -> basic(testTable)({count: i, access: [2]})
+
+			#filter for even only
+			modified = basic(testTable)( (row,id) -> 
+				row.count = 10001 #over 10000!!!!
+			)()
+			#get the counts
+			counts = _(modified).map( (row)-> return row.count)
+
+			allCounts100001 = _(counts).every (count) -> count is 10001
+			deleted = testTable not in admin(testTable)(null)()
+
+			allCounts100001 and deleted
 
 		'can navigate table directories using ..': ->
-			no
+		
+			#navigate into _users, then back to the list
+			navigated = _.isArray(basic('_users')('..')())
 
+			navigated
 
 
 type = (actual) ->
