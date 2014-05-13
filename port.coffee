@@ -61,8 +61,8 @@ module.exports = ->
 		(query) ->
 			if _(query).isUndefined() 
 				tableAccess(tablename,user)
-			else if _(query).isNumber()
-				row tablename,query,user 
+			else if /\d/.test(query)
+				row(tablename,query,user)
 			else if _(query).isFunction()
 				apply tablename,user,query
 			else if _(query).isObject()
@@ -77,7 +77,6 @@ module.exports = ->
 				table tablename,user
 
 	createTable = (tablename,user) ->
-		console.log 'createTable',tablename,user
 		if database.data[user].role is 'admin'
 			database.tables[tablename] = []
 			save(table,[tablename,user])
@@ -103,6 +102,7 @@ module.exports = ->
 			if _(query).isUndefined()
 				access
 			else if _(access).isObject()
+
 				if _(query).isObject()
 					editRow tablename,id,user,query
 				else if query is null
@@ -144,7 +144,7 @@ module.exports = ->
 		if changed 
 			save done
 		else
-			done
+			done()
 
 	sequentialID = () ->
 		database.sequential+=1
@@ -156,7 +156,7 @@ module.exports = ->
 		done.apply(null,args);
 
 	createRow = (tablename,row,user) ->
-		if tablename.charAt(0) isnt '_'
+		if database.data[user].role is 'admin' or tablename.charAt(0) isnt '_'
 			id = sequentialID()
 			database.tables[tablename].push(id)
 			database.data[id] = row

@@ -2,16 +2,6 @@ db = require('../port')()
 _ = require('underscore')
 
 #disable logging
-test = 
-	log: console.log
-
-console.log = ->
-
-type = (actual) ->
-	({})
-		.toString.call(actual)#[Object String]
-		.slice(8,-1)#String
-
 specs = 
 	login:
 		'should deny access for invalid passwords': ->
@@ -32,9 +22,65 @@ specs =
 
 			testTable in tableList and testTable not in restoredList
 
-	
 
-do ->
+		'can destroy tables': ->
+			testTable = 'new table'
+			#create the new table
+			tableList = db('admin','password')(testTable)('..')()
+			#destroy the new table
+			restoredList = db('admin','password')(testTable)(null)('..')()
+
+			testTable in tableList and testTable not in restoredList
+
+		'can create restricted tables': ->
+			restrictedTable = '_restricted'
+
+			talk = db('admin','password')
+			
+			tableList = talk(restrictedTable)('..')()
+
+			restoredList = talk(restrictedTable)(null)()
+
+			restrictedTable in tableList and restrictedTable not in restoredList
+
+		'can destroy restricted tables': ->
+			restrictedTable = '_restricted'
+
+			talk = db('admin','password')
+			
+			tableList = talk(restrictedTable)('..')()
+
+			restoredList = talk(restrictedTable)(null)()
+
+			restrictedTable in tableList and restrictedTable not in restoredList
+
+		'can create and modify restricted records': ->
+			restrictedTable = '_restricted'
+
+			talk = db('admin','password')
+			
+			#create the table and a record
+			contents = talk(restrictedTable)({a: 'created'})('.')()
+
+
+			#get id of new record
+			id = _(contents).chain().keys().last().value()
+
+			#add a new field to the record
+			talk(restrictedTable)(id)({ b: 'modified' })()
+
+
+			createdAndModified = _(talk(restrictedTable)(id)()).isEqual({a: 'created', b: 'modified'})
+			deleted = restrictedTable not in talk(restrictedTable)(null)()
+
+			createdAndModified and deleted
+
+type = (actual) ->
+		({})
+			.toString.call(actual)#[Object String]
+			.slice(8,-1)#String
+
+specRunner = (specs) ->
 
 	passed = []
 	failed = []
@@ -49,5 +95,7 @@ do ->
 
 	nPassed = passed.length 
 	nTests = nPassed + failed.length
-	test.log "Passed #{nPassed} out of #{nTests}"
-	failed and _(failed).each (failure) ->	test.log "FAIL: #{failure}"
+	console.log "Passed #{nPassed} out of #{nTests}"
+	failed and _(failed).each (failure) ->	console.log "FAIL: #{failure}"
+
+specRunner specs
