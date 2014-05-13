@@ -1,20 +1,9 @@
 {
-  "sequential": 535,
+  "sequential": 17,
   "tables": {
     "_users": [
       1,
-      2,
-      4
-    ],
-    "pockets": [
-      5
-    ],
-    "messages": [
-      3,
-      11,
-      12,
-      28,
-      29
+      2
     ]
   },
   "data": {
@@ -29,24 +18,6 @@
       "password": "password",
       "role": "user",
       "access": []
-    },
-    "3": {
-      "body": "Hi",
-      "user": 2,
-      "pocket": 5,
-      "access": [
-        2,
-        4
-      ]
-    },
-    "5": {
-      "name": "Asgard",
-      "description": "Pocket of the gods.",
-      "private": true,
-      "access": [
-        2,
-        4
-      ]
     }
   }
 }
