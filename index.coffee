@@ -172,7 +172,6 @@ module.exports = ->
 		delete database.data[row]
 		save table,[tablename,user]
 
-
 	deleteTable = (tablename,query,user) ->
 		if database.data[user].role is 'admin'
 			_(database.tables[tablename]).each (row) ->

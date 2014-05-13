@@ -1,4 +1,4 @@
-db = require('../port')()
+db = require('../index.coffee')()
 admin = db('admin','password')
 basic = db('basic','password')
 
@@ -208,6 +208,18 @@ specs =
 
 			navigated
 
+	'A table query can be formatted for a AJAX response': ->
+		no
+	'A record query can be formatted for an AJAX response': ->
+		no
+	'A PUT Request for a record can be written directly to crescent': ->
+		no
+	'A POST Request for a record can be written directly to crescent': ->
+		no
+	'A PUT Request of multiple records can be written directly to crescent': ->
+		no
+	'A POST Request of multiple records can be written directly to crescent': ->
+		no
 
 type = (actual) ->
 		({})
@@ -227,7 +239,7 @@ specRunner = (specs) ->
 	nPassed = passed.length 
 	nTests = nPassed + failed.length
 	console.log "Passed #{nPassed} out of #{nTests}"
-	_(passed).each (success) ->	console.log "SUCCESS: #{success}"
+	#_(passed).each (success) ->	console.log "SUCCESS: #{success}"
 	_(failed).each (failure) ->	console.log "FAIL: #{failure}"
 
 specRunner specs
