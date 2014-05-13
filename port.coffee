@@ -61,7 +61,7 @@ module.exports = ->
 		(query) ->
 			if _(query).isUndefined() 
 				tableAccess(tablename,user)
-			else if /\d/.test(query)
+			else if _(query).isNumber() || _(query).isString() and /\d/.test(query) 
 				row(tablename,query,user)
 			else if _(query).isFunction()
 				apply tablename,user,query
@@ -90,7 +90,7 @@ module.exports = ->
 
 		if role is 'admin'
 			response = result
-		else if role == 'user'
+		else if role is 'user'
 			_(result).each (row,id) ->
 				if row.access and user in row.access
 					response[id] = row
@@ -125,18 +125,18 @@ module.exports = ->
 	apply = (tablename,user,apply) ->
 		applyed = {}
 		changed = false
-
-		_(tableAccess(tablename,user)).each (row,id) ->
+		_(tableAccess(tablename,user)).each (record,id) ->
 			unless changed
-				before = _.clone(row)
+				before = _.clone(record)
 
-			if apply.call null,row,id 
-				applyed[id] = row
+			if apply.call null,record,id 
+				applyed[id] = record
 
 			unless changed
-				changed = not _.isEqual(row,before)
+				changed = not _.isEqual(record,before)
 		done = ->
 			(query) ->
+
 				if _(query).isUndefined()
 					applyed
 				else
@@ -151,7 +151,7 @@ module.exports = ->
 
 	save = (done,args) ->
 		_.defer( ->
-			fs.writeFile('./db/data.json',JSON.stringify(database,null,2), "utf8");
+			fs.writeFile('./db/data.json',JSON.stringify(database,null,2), "utf8")
 		)
 		done.apply(null,args);
 

@@ -142,6 +142,56 @@ specs =
 				couldNotDelete and 
 				deleted
 
+		'can modify a record in a restricted table if given specific access': ->
+			testTable = '_restricted'
+			basicId = 2
+			result = admin(testTable)({can: 'access', modified: false, access: [2] })()
+
+			result_id = _(result).keys()[0]
+			
+			#modify
+			basic(testTable)(result_id)({modified: true})
+			
+			#save condition for later
+			beforeAndAfterDifferent = _.isEqual(result,admin(testTable)())
+
+			deleted = testTable not in admin(testTable)(null)()
+
+			beforeAndAfterDifferent and deleted
+
+		'can filter records within a table using an anonymous function' : ->
+
+			testTable = 'test table'
+			#create table
+			admin(testTable)()
+
+			#create 5 records
+			_(5).times (i) -> basic(testTable)({count: i, access: [2]})
+
+			#filter for even only
+			filtered = basic(testTable)( (row,id) -> 
+				row.count % 2 == 0
+			)()
+			#get the counts
+			counts = _(filtered).map( (row)-> return row.count)
+
+			evenOnly = _.isEqual(counts,[0,2,4])
+			deleted = testTable not in admin(testTable)(null)()
+
+			evenOnly and deleted
+			
+
+		'can modify records within a table using an anonymous function' : ->
+			no
+
+		'can delete a restricted record if specific access is provided': ->
+			no
+
+		'can navigate table directories using ..': ->
+			no
+
+
+
 type = (actual) ->
 		({})
 			.toString.call(actual)#[Object String]
@@ -154,11 +204,8 @@ specRunner = (specs) ->
 
 	_(specs).each (expectations,spec) ->
 		_(expectations).each (expectation,title) ->
-				
-			if do expectation
-				passed.push [spec + ' ' + title]
-			else
-				failed.push [spec + ' ' + title]
+			array = {true:passed,false:failed}[do expectation]
+			array.push [spec + ' ' + title]
 
 	nPassed = passed.length 
 	nTests = nPassed + failed.length
