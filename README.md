@@ -42,6 +42,13 @@ db('admin','password') //login
 
 ```
 
+Tests
+-----
+
+To run the tests for crescent enter the following into your terminal.
+
+`npm test`
+
 
 Usage
 -----
