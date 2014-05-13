@@ -174,10 +174,13 @@ module.exports = ->
 
 
 	deleteTable = (tablename,query,user) ->
-		_(database.tables[tablename]).each (row) ->
-			delete database.data[row]
-		delete database.tables[tablename]
-		save table,[tablename,user]
+		if database.data[user].role is 'admin'
+			_(database.tables[tablename]).each (row) ->
+				delete database.data[row]
+			delete database.tables[tablename]
+			save talk,[user]
+		else 
+			'A user cannot delete a table.'
 
 	#Entry point
 	return -> login.apply this, arguments

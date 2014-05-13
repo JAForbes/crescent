@@ -18,7 +18,7 @@ specs =
 			#create the new table
 			tableList = db('admin','password')(testTable)('..')()
 			#destroy the new table
-			restoredList = db('admin','password')(testTable)(null)('..')()
+			restoredList = db('admin','password')(testTable)(null)
 
 			testTable in tableList and testTable not in restoredList
 
@@ -28,7 +28,7 @@ specs =
 			#create the new table
 			tableList = db('admin','password')(testTable)('..')()
 			#destroy the new table
-			restoredList = db('admin','password')(testTable)(null)('..')()
+			restoredList = db('admin','password')(testTable)(null)()
 
 			testTable in tableList and testTable not in restoredList
 
@@ -74,6 +74,22 @@ specs =
 			deleted = restrictedTable not in talk(restrictedTable)(null)()
 
 			createdAndModified and deleted
+
+	'A user':
+		'cannot create tables': ->
+			testTable = 'new table'
+			#create the new table
+			errorMessage = db('basic','password')(testTable)
+
+			type(errorMessage) is 'String'
+
+		'cannot destroy tables': ->
+			testTable = 'new table'
+			db('admin','password')(testTable)()
+			error =  db('basic','password')(testTable)(null)
+			restoredList = db('admin','password')(testTable)(null)()
+
+			type(error) is 'String' and testTable not in restoredList
 
 type = (actual) ->
 		({})
