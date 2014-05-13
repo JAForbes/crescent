@@ -4,7 +4,7 @@
   "description": "A convenient API for a simple JSON store.  Includes basic security roles.  Useful for setting up persistence for simple apps.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "coffee specs/crescent_spec.coffee"
   },
   "keywords": [
     "database",
@@ -23,5 +23,5 @@
   "repository": {
     "type": "git",
     "crescent": "JAForbes/crescent"
-  },
+  }
 }

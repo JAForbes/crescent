@@ -1,5 +1,10 @@
 db = require('../port')()
+admin = db('admin','password')
+basic = db('basic','password')
+
 _ = require('underscore')
+
+
 
 #disable logging
 specs = 
@@ -9,16 +14,15 @@ specs =
 			talk is 'Invalid username or password'
 
 		'should allow access for valid credentials': ->
-			talk = db('admin','password')
-			type(talk()) is 'Array'
+			type(admin()) is 'Array'
 
 	'an admin':
 		'can create tables': ->
 			testTable = 'new table'
 			#create the new table
-			tableList = db('admin','password')(testTable)('..')()
+			tableList = admin(testTable)('..')()
 			#destroy the new table
-			restoredList = db('admin','password')(testTable)(null)
+			restoredList = admin(testTable)(null)
 
 			testTable in tableList and testTable not in restoredList
 
@@ -26,16 +30,16 @@ specs =
 		'can destroy tables': ->
 			testTable = 'new table'
 			#create the new table
-			tableList = db('admin','password')(testTable)('..')()
+			tableList = admin(testTable)('..')()
 			#destroy the new table
-			restoredList = db('admin','password')(testTable)(null)()
+			restoredList = admin(testTable)(null)()
 
 			testTable in tableList and testTable not in restoredList
 
 		'can create restricted tables': ->
 			restrictedTable = '_restricted'
 
-			talk = db('admin','password')
+			talk = admin
 			
 			tableList = talk(restrictedTable)('..')()
 
@@ -46,18 +50,21 @@ specs =
 		'can destroy restricted tables': ->
 			restrictedTable = '_restricted'
 
-			talk = db('admin','password')
+			talk = admin
 			
 			tableList = talk(restrictedTable)('..')()
 
 			restoredList = talk(restrictedTable)(null)()
 
-			restrictedTable in tableList and restrictedTable not in restoredList
+			created = restrictedTable in tableList
+			deleted = restrictedTable not in restoredList
+			
+			created and deleted
 
 		'can create and modify restricted records': ->
 			restrictedTable = '_restricted'
 
-			talk = db('admin','password')
+			talk = admin
 			
 			#create the table and a record
 			contents = talk(restrictedTable)({a: 'created'})('.')()
@@ -79,61 +86,61 @@ specs =
 		'cannot create tables': ->
 			testTable = 'new table'
 			#create the new table
-			errorMessage = db('basic','password')(testTable)
+			errorMessage = basic(testTable)
 
 			type(errorMessage) is 'String'
 
 		'cannot destroy tables': ->
 			testTable = 'new table'
-			db('admin','password')(testTable)()
-			error =  db('basic','password')(testTable)(null)
-			restoredList = db('admin','password')(testTable)(null)()
-
-			type(error) is 'String' and testTable not in restoredList
+			admin(testTable)()
+			errorOccured =  type(basic(testTable)(null)) is 'String'
+			deleted = testTable not in admin(testTable)(null)()
+			
+			errorOccured and deleted
 
 		'cannot view records without access': ->
 			testTable = 'new table'
 			
-			db('admin','password')(testTable)({no: 'access'})()
+			admin(testTable)({no: 'access'})()
 
-			couldNotSee = _(db('basic','password')(testTable)()).isEmpty()
+			couldNotSee = _(basic(testTable)()).isEmpty()
 
-			restoredList = db('admin','password')(testTable)(null)()
+			deleted = testTable not in admin(testTable)(null)()
 
-			couldNotSee and testTable not in restoredList
+			couldNotSee and deleted
 
 		'can view records if they have access': ->
 			testTable = 'new table'
 			basicId = 2
 
-			db('admin','password')(testTable)({can: 'access', access: [basicId] })()
+			admin(testTable)({can: 'access', access: [basicId] })()
 
-			couldSee = not _.isEmpty(db('basic','password')(testTable)())
+			couldSee = not _.isEmpty(basic(testTable)())
 
-			restoredList = db('admin','password')(testTable)(null)()
 
-			couldSee and testTable not in restoredList
+			deleted = testTable not in admin(testTable)(null)()
+			couldSee and deleted
 
 		'cannot modify restricted records, even if the id is known': ->
 			testTable = 'new table'
 			
-			result = db('admin','password')(testTable)({cannot: 'access', modified: false})()
+			result = admin(testTable)({cannot: 'access', modified: false})()
 
 			result_id = _(result).keys()[0]
 			
-			couldNotSee = type(db('basic','password')(testTable)(result_id)()) is 'String'
-			couldNotModify = type(db('basic','password')(testTable)(result_id)({modified: true})) is 'String'
-			couldNotDelete = type(db('basic','password')(testTable)(result_id)(null)) is 'String'
+			couldNotSee = type(basic(testTable)(result_id)()) is 'String'
+			couldNotModify = type(basic(testTable)(result_id)({modified: true})) is 'String'
+			couldNotDelete = type(basic(testTable)(result_id)(null)) is 'String'
 
-			beforeAndAfterSame = _.isEqual(result,db('admin','password')(testTable)())
+			beforeAndAfterSame = _.isEqual(result,admin(testTable)())
 
-			restoredList = db('admin','password')(testTable)(null)()
+			deleted = testTable not in admin(testTable)(null)()
 
 			beforeAndAfterSame and 
 				couldNotSee and 
 				couldNotModify and 
 				couldNotDelete and 
-				testTable not in restoredList
+				deleted
 
 type = (actual) ->
 		({})
@@ -147,11 +154,11 @@ specRunner = (specs) ->
 
 	_(specs).each (expectations,spec) ->
 		_(expectations).each (expectation,title) ->
-					
-				if do expectation
-					passed.push [spec + ' ' + title]
-				else
-					failed.push [spec + ' ' + title]
+				
+			if do expectation
+				passed.push [spec + ' ' + title]
+			else
+				failed.push [spec + ' ' + title]
 
 	nPassed = passed.length 
 	nTests = nPassed + failed.length
