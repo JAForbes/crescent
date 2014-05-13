@@ -82,6 +82,9 @@ specs =
 
 			createdAndModified and deleted
 
+		'cannot edit a pivot': ->
+			no
+
 	'A user':
 		'cannot create tables': ->
 			testTable = 'new table'
@@ -208,18 +211,38 @@ specs =
 
 			navigated
 
-	'A table query can be formatted for a AJAX response': ->
-		no
-	'A record query can be formatted for an AJAX response': ->
-		no
-	'A PUT Request for a record can be written directly to crescent': ->
-		no
-	'A POST Request for a record can be written directly to crescent': ->
-		no
-	'A PUT Request of multiple records can be written directly to crescent': ->
-		no
-	'A POST Request of multiple records can be written directly to crescent': ->
-		no
+		'can access any pivot': ->
+			no
+
+	Crescent:
+		'can store the database in a custom location': ->
+			no
+		'can encrypt the database': ->
+			no
+		'can decrypt the database': ->
+			no
+		'auto generates a pivot hash for the record\'s name': ->
+
+			# ('_usersPivot') <- generated table
+			# ('_pocketsPivot') <- generated table
+			###
+			{
+				<name>: <id>
+				'james': 1,
+				'The Great Pocket': 4
+			}
+			data:
+				4: {
+					name: 'The Great Pocket' //auto update hash on write/delete
+				}
+
+				Pivots are accessible to everyone, but editable to no-one
+			###
+
+			no
+		'automatically adds user id\'s to records created by that user': ->
+			no
+
 
 type = (actual) ->
 		({})
