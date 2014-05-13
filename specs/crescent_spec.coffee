@@ -156,6 +156,7 @@ specRunner = (specs) ->
 	nPassed = passed.length 
 	nTests = nPassed + failed.length
 	console.log "Passed #{nPassed} out of #{nTests}"
-	failed and _(failed).each (failure) ->	console.log "FAIL: #{failure}"
+	_(passed).each (success) ->	console.log "SUCCESS: #{success}"
+	_(failed).each (failure) ->	console.log "FAIL: #{failure}"
 
 specRunner specs
