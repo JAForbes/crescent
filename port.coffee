@@ -19,7 +19,7 @@ module.exports = ->
 		user = database.data[user_id]
 		
 		if username and password and user?.password is password
-			talk user_id	
+			talk user_id*1	
 		else
 			'Invalid username or password'	
 
@@ -92,7 +92,7 @@ module.exports = ->
 			response = result
 		else if role == 'user'
 			_(result).each (row,id) ->
-				if user in row.access
+				if row.access and user in row.access
 					response[id] = row
 		response
 
@@ -110,12 +110,12 @@ module.exports = ->
 				else
 					access
 			else
-				table tablename,user
+				access
 
 	rowAccess = (row,user) ->
 		result = database.data[row]
 		role = database.data[user].role
-		allowed = role is 'admin' or role is 'user' and user in result.access
+		allowed = role is 'admin' or role is 'user' and result.access and user in result.access
 
 		if allowed
 			result

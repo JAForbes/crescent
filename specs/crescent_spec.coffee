@@ -91,6 +91,50 @@ specs =
 
 			type(error) is 'String' and testTable not in restoredList
 
+		'cannot view records without access': ->
+			testTable = 'new table'
+			
+			db('admin','password')(testTable)({no: 'access'})()
+
+			couldNotSee = _(db('basic','password')(testTable)()).isEmpty()
+
+			restoredList = db('admin','password')(testTable)(null)()
+
+			couldNotSee and testTable not in restoredList
+
+		'can view records if they have access': ->
+			testTable = 'new table'
+			basicId = 2
+
+			db('admin','password')(testTable)({can: 'access', access: [basicId] })()
+
+			couldSee = not _.isEmpty(db('basic','password')(testTable)())
+
+			restoredList = db('admin','password')(testTable)(null)()
+
+			couldSee and testTable not in restoredList
+
+		'cannot modify restricted records, even if the id is known': ->
+			testTable = 'new table'
+			
+			result = db('admin','password')(testTable)({cannot: 'access', modified: false})()
+
+			result_id = _(result).keys()[0]
+			
+			couldNotSee = type(db('basic','password')(testTable)(result_id)()) is 'String'
+			couldNotModify = type(db('basic','password')(testTable)(result_id)({modified: true})) is 'String'
+			couldNotDelete = type(db('basic','password')(testTable)(result_id)(null)) is 'String'
+
+			beforeAndAfterSame = _.isEqual(result,db('admin','password')(testTable)())
+
+			restoredList = db('admin','password')(testTable)(null)()
+
+			beforeAndAfterSame and 
+				couldNotSee and 
+				couldNotModify and 
+				couldNotDelete and 
+				testTable not in restoredList
+
 type = (actual) ->
 		({})
 			.toString.call(actual)#[Object String]
