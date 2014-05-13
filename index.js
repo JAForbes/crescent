@@ -3,47 +3,6 @@
 	Date: 20140510
 	Copyright 2014 
 	All Rights Reserverd
-
-	Connect:
-
-	queryTables = db('admin','password')
-
-	queryTable = queryTables('table_name')
-
-	row = queryTable(id)
-
-	//get the value of the row
-	row()
-	//set the value of a row
-	row({ .. })
-
-	//create a row
-	row = queryTable({})
-
-	Or do it all in one step
-
-	db('admin','password')//login
-	('table_name')
-	('id')({}) //set the value of the row in tablename
-	({ ... }) //create a new row
-	('id') //get the value of row in table name with that id
- 
-*/
-
-/*
-	Roles:
-
-	todo: move this logic into a read/write function possibly access()
-
-	Admins: 
-		- can create tables 
-		- can edit all tables including _'s
-		- can create rows in all tables
-
-	Users:
-		- can create rows in non _'s
-		- cannot create tables
-		- cannot edit _'s unless their user id is in the access array
 */
 module.exports = (function(){
 

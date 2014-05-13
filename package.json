@@ -17,10 +17,11 @@
   "author": "James Forbes",
   "license": "MIT",
   "dependencies": {
-    "underscore": "^1.6.0"
+    "underscore": "^1.6.0",
+    "coffee-script": "^1.7.1"
   },
-  "repository" :
-  { "type" : "git"
-  , "crescent" : "JAForbes/crescent"
-  }
+  "repository": {
+    "type": "git",
+    "crescent": "JAForbes/crescent"
+  },
 }
