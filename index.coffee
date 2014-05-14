@@ -7,7 +7,7 @@
 module.exports = ->
 
 	_ = require 'underscore'
-	database = require './db/data.json'
+	database = require '../../db/data.json'
 	fs = require 'fs'
 	###
 		Search for a matching username/password
@@ -151,7 +151,7 @@ module.exports = ->
 
 	save = (done,args) ->
 		_.defer( ->
-			fs.writeFile('./db/data.json',JSON.stringify(database,null,2), "utf8")
+			fs.writeFile('../node_modules/crescent/db/data.json',JSON.stringify(database,null,2), "utf8", ->)
 		)
 		done.apply(null,args);
 
