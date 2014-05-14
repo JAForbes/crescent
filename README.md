@@ -3,6 +3,8 @@ crescent
 
 A convenient API for a simple JSON store.  Includes basic security roles.  Useful for setting up persistence for simple, non-concurrent apps.
 
+This is an early alpha build v0.00.  Do not use this in production.
+
 Installation
 ------------
 
